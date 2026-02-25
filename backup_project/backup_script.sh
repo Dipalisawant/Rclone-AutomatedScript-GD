@@ -10,11 +10,11 @@ BACKUP_ROOT="$HOME/backups/$PROJECT_NAME"
 LOG_FILE="$BACKUP_ROOT/backup.log"
 
 GDRIVE_REMOTE="gdrive:ProjectBackups"
-WEBHOOK_URL="https://github.com/Dipalisawant/my-github-project/settings/hooks"
+WEBHOOK_URL="https://webhook.site/#!/view/dacad6fd-9a51-4c00-a903-552ddafee673"
 
 DAILY_RETENTION=7
-WEEKLY_RETENTION=4
-MONTHLY_RETENTION=3
+WEEKLY_RETENTION=28
+MONTHLY_RETENTION=90
 
 NOTIFY=true
 [[ "${1:-}" == "--no-notify" ]] && NOTIFY=false
@@ -95,14 +95,8 @@ log "Old backups cleaned"
 # ==========================
 # WEBHOOK NOTIFICATION
 # ==========================
-if $NOTIFY; then
-  curl -s -X POST -H "Content-Type: application/json" \
-    -d "{\"project\":\"$PROJECT_NAME\",\"date\":\"$DATE\",\"status\":\"BackupSuccessful\"}" \
-    "$WEBHOOK_URL"
-  log "Webhook notification sent"
-else
-  log "Notification skipped (--no-notify)"
-fi
-
+curl -s -X POST -H "Content-Type: application/json" \
+  -d "{\"project\":\"$PROJECT_NAME\",\"date\":\"$DATE\",\"status\":\"BackupSuccessful\"}" \
+  "$WEBHOOK_URL"
+log "Webhook notification sent"
 log "Backup completed successfully"
-
